@@ -12,6 +12,7 @@ if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
 }
 $err = "";
 $success = "";
+
 if(isset($_REQUEST["addadmin"])){
     include_once "../../common/Operations.php";
     $conn = new Operations();

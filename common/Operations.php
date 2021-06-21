@@ -128,8 +128,8 @@ class Operations
         try {
             $target_file = "src/image/profile/" . basename($_FILES["image_path"]["name"]);
             $path = "/".$target_file;
-            //if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
-                $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,date_of_birth,image_path,:email,:password,:phone)";
+            if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,:date_of_birth,:image_path,:email,:password)";
                 $stmt = $this->conn->prepare($dataQuery);
                 $pass = password_hash($password, PASSWORD_BCRYPT);
                 $stmt->bindParam(":name", $name);
@@ -146,9 +146,9 @@ class Operations
                 else {
                     return json_encode(["status"=>"error","message"=>"Something is Wrong!"]);
                 }
-            /*} else {
+            } else {
                 return json_encode(["status"=>"error","message"=>"Sorry, there was an error uploading your file."]);
-            }*/
+            }
 
         } catch (PDOException  $e) {
             echo $e->getMessage();
