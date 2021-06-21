@@ -10,7 +10,8 @@ class Operations
     function __construct()
     {
         require_once "dbconfig.php";
-        $this->conn = new DBConfig();
+        $db = new DBConfig();
+        $this->conn = $db->DBConnect();
         $this->admin_details = "admin_details";
         $this->parent_details = "parent_details";
         $this->teacher_details = "teacher_details";
@@ -45,7 +46,7 @@ class Operations
     function getTeachersDetails()
     {
         try {
-            $getData = "select * from $this->teacher_details td";
+            $getData = "select * from $this->teacher_details";
             $stmt = $this->conn->prepare($getData);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -107,11 +108,13 @@ class Operations
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $val = $stmt->fetch();
             if (empty($val)) {
-                return $val;
+                return json_encode(["status"=>"success","message"=>"Email id is not registered!"]);
             } else {
                 if (isset($password) && isset($val['password'])) {
                     if (password_verify($password, $val['password'])) {
-                        return $val;
+                        return json_encode(["status"=>"success","message"=>"Login Successfully","data"=>$val]);
+                    }else{
+                        return json_encode(["status"=>"error","message"=>"Password not matched"]);
                     }
                 }
             }
@@ -123,23 +126,30 @@ class Operations
     function insertAdminDetails($name, $mobile, $address, $city, $date_of_birth, $image_path, $email, $password)
     {
         try {
-            $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,date_of_birth,image_path,:email,:password,:phone)";
-            $stmt = $this->conn->prepare($dataQuery);
-            $pass = password_hash($password, PASSWORD_BCRYPT);
-            $stmt->bindParam(":name", $name);
-            $stmt->bindParam(":mobile", $mobile);
-            $stmt->bindParam(":address", $address);
-            $stmt->bindParam(":city", $city);
-            $stmt->bindParam(":date_of_birth", $date_of_birth);
-            $stmt->bindParam(":image_path", $image_path);
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":password", $pass);
-            $stmt->execute();
-            if (isset($stmt))
-                return "Insert Admin Details Successfully";
-            else {
-                return "Something is Wrong!";
-            }
+            $target_file = "src/image/profile/" . basename($_FILES["image_path"]["name"]);
+            $path = "/".$target_file;
+            //if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,date_of_birth,image_path,:email,:password,:phone)";
+                $stmt = $this->conn->prepare($dataQuery);
+                $pass = password_hash($password, PASSWORD_BCRYPT);
+                $stmt->bindParam(":name", $name);
+                $stmt->bindParam(":mobile", $mobile);
+                $stmt->bindParam(":address", $address);
+                $stmt->bindParam(":city", $city);
+                $stmt->bindParam(":date_of_birth", $date_of_birth);
+                $stmt->bindParam(":image_path", $path);
+                $stmt->bindParam(":email", $email);
+                $stmt->bindParam(":password", $pass);
+                $stmt->execute();
+                if (isset($stmt))
+                    return json_encode(["status"=>"success","message"=>"Insert Admin Details Successfully"]);
+                else {
+                    return json_encode(["status"=>"error","message"=>"Something is Wrong!"]);
+                }
+            /*} else {
+                return json_encode(["status"=>"error","message"=>"Sorry, there was an error uploading your file."]);
+            }*/
+
         } catch (PDOException  $e) {
             echo $e->getMessage();
         }

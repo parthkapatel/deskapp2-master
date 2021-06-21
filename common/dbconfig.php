@@ -11,6 +11,10 @@ class DBConfig
 
     public function __construct()
     {
+
+    }
+
+    public function DBConnect(){
         try {
             $createDB = "CREATE DATABASE IF NOT EXISTS $this->dbName";
             $this->conn = new PDO("mysql:host=$this->serverName",$this->userName,$this->password);

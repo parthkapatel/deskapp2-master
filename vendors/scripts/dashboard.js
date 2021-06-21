@@ -1,5 +1,5 @@
 var options = {
-	series: [80],
+	series: [document.getElementById("chartNumber").innerText],
 	grid: {
 		padding: {
 			top: 0,
@@ -69,7 +69,7 @@ var options = {
 };
 
 var options2 = {
-	series: [70],
+	series: [document.getElementById("chartNumber2").innerText],
 	grid: {
 		padding: {
 			top: 0,

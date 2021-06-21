@@ -3,7 +3,14 @@
 <?php include_once '../../common/right-sidebar.php'; ?>
 
 <?php include_once '../admin-left-sidebar.php'; ?>
+<?php
 
+if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
+    $path = BASE_URL . "admin/ADLogin/";
+    header("Location: $path");
+}
+
+?>
 <div class="main-container">
     <div class="pd-ltr-20 xs-pd-20-10">
         <div class="pd-20 card-box mb-30">
@@ -28,31 +35,45 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="table-plus">
-                        <img src="<?php echo BASE_URL; ?>vendors/images/product-1.jpg" width="70" height="70" alt="">
-                    </td>
-                    <td>
-                        <h5 class="font-16">Shirt</h5>
-                        by John Doe
-                    </td>
-                    <td>Black</td>
-                    <td>M</td>
-                    <td>$1000</td>
-                    <td>1</td>
-                    <td>
-                        <div class="dropdown">
-                            <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-                                <i class="dw dw-more"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                                <a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>
-                                <a class="dropdown-item" href="#"><i class="dw dw-edit2"></i> Edit</a>
-                                <a class="dropdown-item" href="#"><i class="dw dw-delete-3"></i> Delete</a>
+                <?php
+                require_once "../../common/Operations.php";
+                $conn = new Operations();
+                $res = $conn->getTeachersDetails();
+                $no = 1;
+                foreach ($res as $val) {
+                    ?>
+                    <tr>
+                        <td><?php echo $no++; ?></td>
+                        <td class="table-plus">
+                            <img src="<?php echo BASE_URL; ?>vendors/images/product-1.jpg" width="70" height="70"
+                                 alt="">
+                        </td>
+                        <td>
+                            <h5 class="font-16"><?php echo $val["name"]; ?></h5>
+                        </td>
+                        <td><?php echo $val["email"]; ?></td>
+                        <td><?php echo $val["mobile"]; ?></td>
+                        <td><?php echo $val["address"]; ?></td>
+                        <td><?php echo $val["city"]; ?></td>
+                        <td><?php echo date("d-m-Y", strtotime($val['date_of_birth'])); ?></td>
+                        <td><?php echo $val["cpr"]; ?></td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#"
+                                   role="button" data-toggle="dropdown">
+                                    <i class="dw dw-more"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                                    <!--<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>-->
+                                    <a class="dropdown-item" href="/admin/edit-teacher/?id=<?php echo $val['id']; ?>"><i class="dw dw-edit2"></i> Edit</a>
+                                    <a class="dropdown-item" href="/admin/delete-teacher/?id=<?php echo $val['id']; ?>""><i class="dw dw-delete-3"></i> Delete</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
                 </tbody>
             </table>
         </div>
