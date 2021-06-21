@@ -1,7 +1,7 @@
 <?php ?>
 <div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="index.html">
+			<a href="<?php echo BASE_URL; ?>admin/">
 				<img src="<?php echo BASE_URL; ?>vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 				<img src="<?php echo BASE_URL; ?>vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
 			</a>
