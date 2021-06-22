@@ -70,7 +70,7 @@ if (!isset($_SESSION["teacher_email"])) {
                     } else {
                         ?>
                         <tr>
-                            <td>Select Parent Name</td>
+                            <td colspan="4">Select Parent Name</td>
                         </tr>
                         <?php
                     }
