@@ -161,12 +161,12 @@ class Operations
         }
     }
 
-    function insertLessons($lessons)
+    function insertLessons()
     {
 
         try {
-            $target_file = BASE_URL . "src/lessons/" . basename($_FILES["lessons"]["name"]);
-            $path = "/" . $target_file;
+            $target_file =  $_SERVER['DOCUMENT_ROOT'] . "/deskapp/src/lessons/" . basename($_FILES["lessons"]["name"]);
+            $path = "/src/lessons/" . basename($_FILES["lessons"]["name"]);
             if (move_uploaded_file($_FILES["lessons"]["tmp_name"], $target_file)) {
                 $dataQuery = "INSERT INTO $this->lessons (path) VALUES (:path)";
                 $stmt = $this->conn->prepare($dataQuery);

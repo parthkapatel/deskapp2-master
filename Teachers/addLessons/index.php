@@ -1,6 +1,4 @@
-<?php
-session_start();
-?>
+
 <?php include_once '../../common/header.php'; ?>
 
 <?php include_once '../../common/right-sidebar.php'; ?>
@@ -17,7 +15,7 @@ $err = "";
 $success = "";
 
 if (isset($_REQUEST["btnAddLesson"])) {
-    $res = $conn->insertLessons($_REQUEST["lessons"]);
+    $res = $conn->insertLessons();
     $res = json_decode($res);
     if($res->status == "success"){
         $success = $res->message;
@@ -39,8 +37,22 @@ if (isset($_REQUEST["btnAddLesson"])) {
                         <h4 class="text-blue h4">Add Lessons</h4>
                     </div>
                     <br><br>
-                    <input type="file" name="lessons" id="lessons" value="">
-                    <input type="submit" name="btnAddLesson" value="Add Lessons" class="btn btn-primary">
+                    <div class="form-group row">
+                        <label class="form-control-label col-sm-12 col-md-3 col-form-label">Lesson Title</label>
+                        <div class="col-sm-12 col-md-9">
+                            <input type="text" name="title" class="form-control" placeholder="chapter">
+                            <div class="form-control-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="form-control-label col-sm-12 col-md-3 col-form-label">Add Lesson</label>
+                        <div class="col-sm-12 col-md-9">
+                            <input type="file" name="lessons" id="lessons" value="" class="form-control" placeholder="chapter">
+                            <div class="form-control-feedback"></div>
+                        </div>
+                    </div>
+
+                    <input type="submit" name="btnAddLesson" value="Add Lessons" class="btn btn-primary"><br><br>
                     <?php if($err !== ""){ ?>
                         <div class="alert alert-danger "><?php echo $err; ?></div>
                     <?php }else if($success !== ""){ ?>

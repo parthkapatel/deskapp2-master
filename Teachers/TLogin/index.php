@@ -1,9 +1,7 @@
 
 <?php include_once '../../common/header.php'; ?>
 
-<?php
-session_start();
-?>
+
 <?php
 
 if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
