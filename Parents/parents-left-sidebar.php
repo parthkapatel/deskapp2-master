@@ -20,10 +20,11 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-user-1"></span><span class="mtext">Student</span>
+							<span class="micon dw dw-user-1"></span><span class="mtext">Manage Kids</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="<?php echo BASE_URL; ?>Parents/addStudent/">Add Student</a></li>
+							<li><a href="<?php echo BASE_URL; ?>Parents/addStudent/">Add Kids Data</a></li>
+                            <li><a href="<?php echo BASE_URL; ?>Parents/viewKidList/">View Kids Data</a></li>
 						</ul>
 					</li>
 
@@ -32,7 +33,7 @@
 							<span class="micon dw dw-user-1"></span><span class="mtext">Lesson</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="<?php echo BASE_URL; ?>Parents/Lessons/viewLessons">View Lessons</a></li>
+							<li><a href="<?php echo BASE_URL; ?>Parents/Lessons/">View Lessons</a></li>
 							<li><a href="<?php echo BASE_URL; ?>Parents/addStudent/addQuerys">Add Querys</a></li>
 						</ul>
 					</li>

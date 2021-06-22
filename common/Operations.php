@@ -60,6 +60,7 @@ class Operations
         }
     }
 
+
     function getAdminDetailsById($id)
     {
         try {
@@ -77,9 +78,22 @@ class Operations
     function getChildDetailsByParentId($id)
     {
         try {
-            $getData = "select kd.id,kd.name,kd.email,kd.date_of_birth from $this->kids_details kd inner join $this->parent_details pd on kd.parent_id = pd.id where pd.id=:id";
+            $getData = "select kd.id,kd.name,kd.email,kd.date_of_birth,kd.syndrome from $this->kids_details kd inner join $this->parent_details pd on kd.parent_id = pd.id where pd.id=:id";
             $stmt = $this->conn->prepare($getData);
             $stmt->bindParam(":id", $id);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function getLessonsDetails()
+    {
+        try {
+            $getData = "select * from $this->lessons ";
+            $stmt = $this->conn->prepare($getData);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             return $stmt->fetchAll();
@@ -155,6 +169,27 @@ class Operations
                 return json_encode(["status" => "error", "message" => "Sorry, there was an error uploading your file."]);
             }
 
+        } catch (PDOException  $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function insertKidDetails($name, $parent_id,$date_of_birth, $email, $syndrome)
+    {
+        try {
+            $dataQuery = "INSERT INTO $this->kids_details (parent_id,name,date_of_birth,email,syndrome) VALUES (:parent_id,:name,:date_of_birth,:email,:syndrome)";
+            $stmt = $this->conn->prepare($dataQuery);
+            $stmt->bindParam(":parent_id", $parent_id);
+            $stmt->bindParam(":name", $name);
+            $stmt->bindParam(":date_of_birth", $date_of_birth);
+            $stmt->bindParam(":email", $email);
+            $stmt->bindParam(":syndrome", $syndrome);
+            $stmt->execute();
+            if (isset($stmt))
+                return json_encode(["status" => "success", "message" => "Insert Your Kid Details Successfully"]);
+            else {
+                return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
+            }
         } catch (PDOException  $e) {
             echo $e->getMessage();
         }
@@ -272,6 +307,14 @@ class Operations
         return $stmt->execute();
     }
 
+    function deleteKidDetails($kid_id)
+    {
+        $getData = "delete from $this->kids_details where id=:uid";
+        $stmt = $this->conn->prepare($getData);
+        $stmt->bindParam(":uid", $kid_id);
+        return $stmt->execute();
+    }
+
     function updateAdminDetails($admin_id, $name, $mobile, $address, $city, $date_of_birth, $password)
     {
         try {
@@ -315,10 +358,10 @@ class Operations
                 $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
-                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`password` = :password WHERE id=:uid";
+                    $dataQuery = "update $this->parent_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`password` = :password WHERE id=:uid";
                 }
             } else {
-                $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`password` = :password WHERE id=:uid";
+                $dataQuery = "update $this->parent_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`password` = :password WHERE id=:uid";
             }
             $stmt = $this->conn->prepare($dataQuery);
             $pass = password_hash($password, PASSWORD_BCRYPT);
@@ -342,14 +385,14 @@ class Operations
         }
     }
 
-    function updateTeacherDetails($teacher_id, $name, $mobile, $address, $city, $date_of_birth, $image_path, $cpr, $password)
+    function updateTeacherDetails($teacher_id, $name, $mobile, $address, $city, $date_of_birth, $cpr, $password)
     {
         try {
             if (isset($image_path)) {
                 $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
-                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`cpr`=:cpr,`password` = :password WHERE id=:uid";
+                    $dataQuery = "update $this->teacher_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`cpr`=:cpr,`password` = :password WHERE id=:uid";
                 }
             } else {
                 $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`cpr`=:cpr,`password` = :password WHERE id=:uid";
