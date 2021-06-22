@@ -4,39 +4,38 @@
 
 <?php include_once '../admin-left-sidebar.php'; ?>
 <?php
-session_start();
+$err = "";
+$success = "";
+include_once "../../common/Operations.php";
+$conn = new Operations();
 if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
     $path = BASE_URL . "admin/ADLogin/";
     header("Location: $path");
 }
 
-if (isset($_REQUEST["id"]) && $_REQUEST["id"]==$_SESSION["admin_id"]) {
+if (isset($_REQUEST["id"]) && $_REQUEST["id"] != $_SESSION["admin_id"]) {
+    $path = ADMIN_BASE_URL . "viewAdminList/";
+    header("Location: $path");
+} else if (isset($_REQUEST["id"]) && $_REQUEST["id"] == $_SESSION["admin_id"]) {
     include_once "../../common/Operations.php";
     $conn = new Operations();
     $res = $conn->getAdminDetailsById($_REQUEST["id"]);
 }
-else if(isset($_REQUEST["id"]) && $_REQUEST["id"] != $_SESSION["admin_id"]){
-    $path = BASE_URL . "admin/viewAdminList/";
-    header("Location: $path");
-}
 
-if(isset($_REQUEST["updateAdmin"])){
-    /*if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || $_REQUEST["email"] || empty($_REQUEST["password"]))
-    {
+if (isset($_REQUEST["updateAdmin"])) {
+    if (empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"]) || empty($_REQUEST["password"])) {
         $err = "all fields are required";
-    }else{*/
-    include_once "../../common/Operations.php";
-    $conn = new Operations();
-    $res = $conn->updateAdminDetails($_REQUEST["id"],$_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["password"]);
-    $res = json_decode($res);
-    if($res->status == "success"){
-        $success = $res->message;
-        $path = BASE_URL . "admin/viewAdminList/";
-        header("Location: $path");
-    }else if($res->status == "error"){
-        $err = $res->message;
+    } else {
+        $res = $conn->updateAdminDetails($_REQUEST["id"], $_REQUEST["name"], $_REQUEST["mobile"], $_REQUEST["address"], $_REQUEST["city"], $_REQUEST["date_of_birth"], $_REQUEST["password"]);
+        $res = json_decode($res);
+        if ($res->status == "success") {
+            $success = $res->message;
+            $path = ADMIN_BASE_URL . "viewAdminList/";
+            header("Location:".ADMIN_BASE_URL);
+        } else if ($res->status == "error") {
+            $err = $res->message;
+        }
     }
-    //}
 }
 ?>
     <div class="main-container">
@@ -54,28 +53,32 @@ if(isset($_REQUEST["updateAdmin"])){
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">Name</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="text" name="name" class="form-control" placeholder="John Doe" value="<?php echo $res['name']; ?>">
+                                    <input type="text" name="name" class="form-control" placeholder="John Doe"
+                                           value="<?php echo $res['name']; ?>">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">Mobile</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="number" name="mobile" class="form-control" placeholder="785412369" value="<?php echo $res['mobile']; ?>">
+                                    <input type="number" name="mobile" class="form-control" placeholder="785412369"
+                                           value="<?php echo $res['mobile']; ?>">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">Address</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="text" name="address" class="form-control" placeholder="Swastik compex" value="<?php echo $res['address']; ?>">
+                                    <input type="text" name="address" class="form-control" placeholder="Swastik compex"
+                                           value="<?php echo $res['address']; ?>">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">City</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="text" name="city" class="form-control" placeholder="Mumbai" value="<?php echo $res['city']; ?>">
+                                    <input type="text" name="city" class="form-control" placeholder="Mumbai"
+                                           value="<?php echo $res['city']; ?>">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
@@ -83,7 +86,8 @@ if(isset($_REQUEST["updateAdmin"])){
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">Date of
                                     Birth</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="date" name="date_of_birth" class="form-control" value="<?php echo $res['date_of_birth']; ?>">
+                                    <input type="date" name="date_of_birth" class="form-control"
+                                           value="<?php echo $res['date_of_birth']; ?>">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
@@ -97,21 +101,23 @@ if(isset($_REQUEST["updateAdmin"])){
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">email</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="text" name="email" class="form-control" placeholder="email@email.com" value="<?php echo $res['email']; ?>" disabled>
+                                    <input type="text" name="email" class="form-control" placeholder="email@email.com"
+                                           value="<?php echo $res['email']; ?>" disabled>
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="form-control-label col-sm-12 col-md-3 col-form-label">Password</label>
                                 <div class="col-sm-12 col-md-9">
-                                    <input type="password" name="password" class="form-control" placeholder="abc@123" value="">
+                                    <input type="password" name="password" class="form-control" placeholder="abc@123"
+                                           value="">
                                     <div class="form-control-feedback"></div>
                                 </div>
                             </div>
                             <input type="submit" class="btn btn-primary" name="updateAdmin" value="Update Admin">
-                            <?php if($err !== ""){ ?>
+                            <?php if ($err !== "") { ?>
                                 <div class="alert alert-danger "><?php echo $err; ?></div>
-                            <?php }else if($success !== ""){ ?>
+                            <?php } else if ($success !== "") { ?>
                                 <div class="alert alert-success "><?php echo $success; ?></div>
                             <?php } ?>
                         </div>

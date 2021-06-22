@@ -15,23 +15,22 @@ $err = "";
 $success = "";
 
 if(isset($_REQUEST["addTeacher"])){
-    /*if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || $_REQUEST["email"] || empty($_REQUEST["password"]))
+    if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || empty($_REQUEST["email"]) || empty($_REQUEST["password"]))
     {
         $err = "all fields are required";
-    }else{*/
+    }else{
         include_once "../../common/Operations.php";
         $conn = new Operations();
-        $res = $conn->insertTeacherDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["cpr"],$_REQUEST["email"],$_REQUEST["password"]);
+        $res = $conn->insertTeacherDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["cpr"],$_REQUEST["email"],$_REQUEST["password"]);
         $res = json_decode($res);
-        var_dump($res);
         if($res->status == "success"){
             $success = $res->message;
-            $path = BASE_URL . "admin/viewTeacherList/";
-            // header("Location: $path");
+            $path = ADMIN_BASE_URL . "viewTeacherList/";
+            header("Location: $path");
         }else if($res->status == "error"){
             $err = $res->message;
         }
-    //}
+    }
 }
 
 ?>
@@ -84,7 +83,7 @@ if(isset($_REQUEST["addTeacher"])){
                         <div class="form-group row">
                             <label class="form-control-label col-sm-12 col-md-3 col-form-label">Image</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="file" accept=".jpeg,.jpg" name="image_path" class="form-control">
+                                <input type="file" accept=".jpeg,.jpg" name="image_path" id="image_path" class="form-control">
                                 <div class="form-control-feedback"></div>
                             </div>
                         </div>
