@@ -4,6 +4,37 @@
 
 <?php include_once '../admin-left-sidebar.php'; ?>
 
+<?php
+
+
+if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
+    $path = BASE_URL . "admin/ADLogin/";
+    header("Location: $path");
+}
+$err = "";
+$success = "";
+
+if(isset($_REQUEST["addTeacher"])){
+    /*if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || $_REQUEST["email"] || empty($_REQUEST["password"]))
+    {
+        $err = "all fields are required";
+    }else{*/
+        include_once "../../common/Operations.php";
+        $conn = new Operations();
+        $res = $conn->insertTeacherDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["cpr"],$_REQUEST["email"],$_REQUEST["password"]);
+        $res = json_decode($res);
+        var_dump($res);
+        if($res->status == "success"){
+            $success = $res->message;
+            $path = BASE_URL . "admin/viewTeacherList/";
+            // header("Location: $path");
+        }else if($res->status == "error"){
+            $err = $res->message;
+        }
+    //}
+}
+
+?>
 <div class="main-container">
     <div class="pd-ltr-20 xs-pd-20-10">
         <div class="pd-20 card-box mb-30">
@@ -12,7 +43,7 @@
                     <h4 class="text-blue h4">Add New Teacher</h4>
                 </div>
             </div>
-            <form>
+            <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6 col-sm-12 p-2">
                         <div class="form-group row">
@@ -78,7 +109,12 @@
                                 <div class="form-control-feedback"></div>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary" name="addadmin">
+                        <input type="submit" class="btn btn-primary" name="addTeacher">
+                        <?php if($err !== ""){ ?>
+                            <div class="alert alert-danger "><?php echo $err; ?></div>
+                        <?php }else if($success !== ""){ ?>
+                            <div class="alert alert-success "><?php echo $success; ?></div>
+                        <?php } ?>
                     </div>
                 </div>
             </form>

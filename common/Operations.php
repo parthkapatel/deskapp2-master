@@ -64,7 +64,7 @@ class Operations
             $stmt->bindParam(":id", $id);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            return $stmt->fetchAll();
+            return $stmt->fetch();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -84,7 +84,7 @@ class Operations
         }
     }
 
-    function getTeacherDetailsById($id)
+    function getTeacherDetailsById($id): array
     {
         try {
             $getData = "select * from $this->teacher_details td where id=:id";
@@ -92,7 +92,7 @@ class Operations
             $stmt->bindParam(":id", $id);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            return $stmt->fetchAll();
+            return $stmt->fetch();
         } catch (PDOException $e) {
             echo $e->getMessage();
         }
@@ -101,20 +101,20 @@ class Operations
     function checkEmailAndPassword($email, $password, $tableName)
     {
         try {
-            $checkEmail = "select id,name,email,password from $tableName where email=:email ";
+            $checkEmail = "select * from $tableName where email=:email ";
             $stmt = $this->conn->prepare($checkEmail);
             $stmt->bindParam(":email", $email);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $val = $stmt->fetch();
             if (empty($val)) {
-                return json_encode(["status"=>"success","message"=>"Email id is not registered!"]);
+                return json_encode(["status" => "success", "message" => "Email id is not registered!"]);
             } else {
                 if (isset($password) && isset($val['password'])) {
                     if (password_verify($password, $val['password'])) {
-                        return json_encode(["status"=>"success","message"=>"Login Successfully","data"=>$val]);
-                    }else{
-                        return json_encode(["status"=>"error","message"=>"Password not matched"]);
+                        return json_encode(["status" => "success", "message" => "Login Successfully", "data" => $val]);
+                    } else {
+                        return json_encode(["status" => "error", "message" => "Password not matched"]);
                     }
                 }
             }
@@ -126,8 +126,8 @@ class Operations
     function insertAdminDetails($name, $mobile, $address, $city, $date_of_birth, $image_path, $email, $password)
     {
         try {
-            $target_file = "src/image/profile/" . basename($_FILES["image_path"]["name"]);
-            $path = "/".$target_file;
+            $target_file = "src/images/profile/" . basename($_FILES["image_name"]["name"]);
+            $path = "/" . $target_file;
             if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
                 $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,:date_of_birth,:image_path,:email,:password)";
                 $stmt = $this->conn->prepare($dataQuery);
@@ -142,12 +142,12 @@ class Operations
                 $stmt->bindParam(":password", $pass);
                 $stmt->execute();
                 if (isset($stmt))
-                    return json_encode(["status"=>"success","message"=>"Insert Admin Details Successfully"]);
+                    return json_encode(["status" => "success", "message" => "Insert Admin Details Successfully"]);
                 else {
-                    return json_encode(["status"=>"error","message"=>"Something is Wrong!"]);
+                    return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
                 }
             } else {
-                return json_encode(["status"=>"error","message"=>"Sorry, there was an error uploading your file."]);
+                return json_encode(["status" => "error", "message" => "Sorry, there was an error uploading your file."]);
             }
 
         } catch (PDOException  $e) {
@@ -185,30 +185,36 @@ class Operations
     function insertTeacherDetails($name, $mobile, $address, $city, $date_of_birth, $image_path, $cpr, $email, $password)
     {
         try {
-            $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,cpr,email,password) VALUES (:name,:mobile,:address,:city,date_of_birth,image_path,:cpr,:syndrome_details,:email,:password,:phone)";
-            $stmt = $this->conn->prepare($dataQuery);
-            $pass = password_hash($password, PASSWORD_BCRYPT);
-            $stmt->bindParam(":name", $name);
-            $stmt->bindParam(":mobile", $mobile);
-            $stmt->bindParam(":address", $address);
-            $stmt->bindParam(":city", $city);
-            $stmt->bindParam(":date_of_birth", $date_of_birth);
-            $stmt->bindParam(":image_path", $image_path);
-            $stmt->bindParam(":cpr", $cpr);
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":password", $pass);
-            $stmt->execute();
-            if (isset($stmt))
-                return "Insert Teacher Details Successfully";
-            else {
-                return "Something is Wrong!";
-            }
+            $target_file = "src/images/profile/" . basename($_FILES["image_path"]["name"]);
+            $path = "/" . $target_file;
+            //if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                $dataQuery = "INSERT INTO $this->teacher_details (name, mobile,address,city,date_of_birth,image_path,cpr,email,password) VALUES (:name,:mobile,:address,:city,:date_of_birth,:image_path,:cpr,:email,:password)";
+                $stmt = $this->conn->prepare($dataQuery);
+                $pass = password_hash($password, PASSWORD_BCRYPT);
+                $stmt->bindParam(":name", $name);
+                $stmt->bindParam(":mobile", $mobile);
+                $stmt->bindParam(":address", $address);
+                $stmt->bindParam(":city", $city);
+                $stmt->bindParam(":date_of_birth", $date_of_birth);
+                $stmt->bindParam(":image_path", $path);
+                $stmt->bindParam(":cpr", $cpr);
+                $stmt->bindParam(":email", $email);
+                $stmt->bindParam(":password", $pass);
+                $stmt->execute();
+                if (isset($stmt))
+                    return json_encode(["status" => "success", "message" => "Insert Teacher Details Successfully"]);
+                else {
+                    return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
+                }
+            /*} else {
+                return json_encode(["status" => "error", "message" => "Sorry, there was an error uploading your file."]);
+            }*/
         } catch (PDOException  $e) {
             echo $e->getMessage();
         }
     }
 
-    function deleteAdminDetails($admin_id)
+    function deleteAdminDetails($admin_id): bool
     {
         $getData = "delete from $this->admin_details where id=:uid";
         $stmt = $this->conn->prepare($getData);
@@ -235,7 +241,15 @@ class Operations
     function updateAdminDetails($admin_id, $name, $mobile, $address, $city, $date_of_birth, $image_path, $password)
     {
         try {
-            $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`= :image_path,`password` = :password WHERE id=:uid";
+            if(isset($image_path)){
+                $target_file = "src/images/profile/" . basename($_FILES["image_path"]["name"]);
+                $path = "/" . $target_file;
+                if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`password` = :password WHERE id=:uid";
+                }
+            }else{
+                $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`password` = :password WHERE id=:uid";
+            }
             $pass = password_hash($password, PASSWORD_BCRYPT);
             $stmt = $this->conn->prepare($dataQuery);
             $stmt->bindParam(":uid", $admin_id);
@@ -244,21 +258,23 @@ class Operations
             $stmt->bindParam(":address", $address);
             $stmt->bindParam(":city", $city);
             $stmt->bindParam(":date_of_birth", $date_of_birth);
-            $stmt->bindParam(":image_path", $image_path);
+            if(isset($image_path)){
+                $stmt->bindParam(":image_path", $path);
+            }
             $stmt->bindParam(":password", $pass);
 
             $stmt->execute();
             if (isset($stmt))
-                return "Update Admin Details Successfully";
+                return json_encode(["status" => "success", "message" => "Update Admin Details Successfully"]);
             else {
-                return "Something is wrong!";
+                return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
             }
         } catch (PDOException  $e) {
             echo $e->getMessage();
         }
     }
 
-    function updateParentDetails($parent_id, $name, $mobile, $address, $city, $date_of_birth, $image_path,$cpr,$syndrome_details, $password)
+    function updateParentDetails($parent_id, $name, $mobile, $address, $city, $date_of_birth, $image_path, $cpr, $syndrome_details, $password)
     {
         try {
             $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`= :image_path,`cpr`=:cpr,`syndrome_details`=:syndrome_details,`password` = :password WHERE id=:uid";
@@ -286,10 +302,18 @@ class Operations
         }
     }
 
-    function updateTeacherDetails($teacher_id, $name, $mobile, $address, $city, $date_of_birth, $image_path,$cpr, $password)
+    function updateTeacherDetails($teacher_id, $name, $mobile, $address, $city, $date_of_birth, $image_path, $cpr, $password)
     {
         try {
-            $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`= :image_path,`cpr`=:cpr,`password` = :password WHERE id=:uid";
+            if(isset($image_path)){
+                $target_file = "src/images/profile/" . basename($_FILES["image_path"]["name"]);
+                $path = "/" . $target_file;
+                if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
+                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`cpr`=:cpr,`password` = :password WHERE id=:uid";
+                }
+            }else{
+                $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`cpr`=:cpr,`password` = :password WHERE id=:uid";
+            }
             $stmt = $this->conn->prepare($dataQuery);
             $pass = password_hash($password, PASSWORD_BCRYPT);
             $stmt->bindParam(":uid", $teacher_id);
@@ -298,15 +322,17 @@ class Operations
             $stmt->bindParam(":address", $address);
             $stmt->bindParam(":city", $city);
             $stmt->bindParam(":date_of_birth", $date_of_birth);
-            $stmt->bindParam(":image_path", $image_path);
+            if(isset($image_path)){
+                $stmt->bindParam(":image_path", $path);
+            }
             $stmt->bindParam(":cpr", $cpr);
             $stmt->bindParam(":password", $pass);
 
             $stmt->execute();
             if (isset($stmt))
-                return "Update Teacher Details Successfully";
+                return json_encode(["status" => "success", "message" => "Update Teacher Details Successfully"]);
             else {
-                return "Something is wrong!";
+                return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
             }
         } catch (PDOException  $e) {
             echo $e->getMessage();

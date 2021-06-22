@@ -10,7 +10,7 @@ if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
 
 $err = "";
 $success = "";
-if(isset($_REQUEST["adminLogin"])){
+if(isset($_REQUEST["teacherLogin"])){
     $email = $_REQUEST["email"];
     $password = $_REQUEST["password"];
     echo $password;
@@ -36,7 +36,7 @@ if(isset($_REQUEST["adminLogin"])){
         <div class="pd-20 card-box w-auto">
             <div class="clearfix">
                 <div class="pull-left">
-                    <h4 class="text-blue h4">Admin Login</h4>
+                    <h4 class="text-blue h4">Teacher Login</h4>
                 </div>
             </div>
             <form action="" method="POST" autocomplete="off">
@@ -57,9 +57,9 @@ if(isset($_REQUEST["adminLogin"])){
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" name="adminLogin" value="Login">
                     <?php if($err !== ""){ ?>
-                    <div class="alert alert-danger "><?php echo $err; ?></div>
+                        <div class="alert alert-danger "><?php echo $err; ?></div>
                     <?php }else if($success !== ""){ ?>
-                    <div class="alert alert-success "><?php echo $success; ?></div>
+                        <div class="alert alert-success "><?php echo $success; ?></div>
                     <?php } ?>
                 </div>
 

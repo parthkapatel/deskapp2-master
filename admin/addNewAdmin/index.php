@@ -13,18 +13,23 @@ if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
 $err = "";
 $success = "";
 
-if(isset($_REQUEST["addadmin"])){
-    include_once "../../common/Operations.php";
-    $conn = new Operations();
-    $res = $conn->insertAdminDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["email"],$_REQUEST["password"]);
-    $res = json_decode($res);
-    if($res->status == "success"){
-        $success = $res->message;
-        $path = BASE_URL . "admin/viewAdminList/";
-       // header("Location: $path");
-    }else if($res->status == "error"){
-        $err = $res->message;
-    }
+if(isset($_REQUEST["addAdmin"])){
+    /*if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || $_REQUEST["email"] || empty($_REQUEST["password"]))
+    {
+        $err = "all fields are required";
+    }else{*/
+        include_once "../../common/Operations.php";
+        $conn = new Operations();
+        $res = $conn->insertAdminDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["email"],$_REQUEST["password"]);
+        $res = json_decode($res);
+        if($res->status == "success"){
+            $success = $res->message;
+            $path = BASE_URL . "admin/viewAdminList/";
+            // header("Location: $path");
+        }else if($res->status == "error"){
+            $err = $res->message;
+        }
+    //}
 }
 ?>
 <div class="main-container">
@@ -35,7 +40,7 @@ if(isset($_REQUEST["addadmin"])){
                     <h4 class="text-blue h4">Add New Admin</h4>
                 </div>
             </div>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6 col-sm-12 p-2">
                         <div class="form-group row">
@@ -94,7 +99,7 @@ if(isset($_REQUEST["addadmin"])){
                                 <div class="form-control-feedback"></div>
                             </div>
                         </div>
-                        <input type="submit" class="btn btn-primary" name="addadmin" value="Add Admin">
+                        <input type="submit" class="btn btn-primary" name="addAdmin" value="Add Admin">
                         <?php if($err !== ""){ ?>
                             <div class="alert alert-danger "><?php echo $err; ?></div>
                         <?php }else if($success !== ""){ ?>

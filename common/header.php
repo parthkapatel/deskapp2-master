@@ -61,9 +61,11 @@
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="<?php echo BASE_URL; ?>vendors/images/photo1.jpg" alt="">
+							<img src="<?php echo BASE_URL; ?><?php echo $_SESSION["admin_image_path"];?> " alt="">
 						</span>
-                    <span class="user-name">Ross C. Lopez</span>
+                    <?php if(isset($_SESSION["admin_email"])){ ?>
+                        <span class="user-name"><?php echo $_SESSION["admin_name"]; ?></span>
+                    <?php } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/profile/"><i class="dw dw-user1"></i>
