@@ -68,8 +68,18 @@
                     <?php } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-                    <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/profile/"><i class="dw dw-user1"></i>
-                        Profile</a>
+                    <?php if(isset($_SESSION["admin_email"])){ ?>
+                        <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/profile/"><i class="dw dw-user1"></i>
+                            Profile</a>
+                    <?php } ?>
+                    <?php if(isset($_SESSION["teacher_email"])){ ?>
+                        <a class="dropdown-item" href="<?php echo BASE_URL; ?>Teachers/profile/"><i class="dw dw-user1"></i>
+                            Profile</a>
+                    <?php } ?>
+                    <?php if(isset($_SESSION["parent_email"])){ ?>
+                        <a class="dropdown-item" href="<?php echo BASE_URL; ?>Parents/profile/"><i class="dw dw-user1"></i>
+                            Profile</a>
+                    <?php } ?>
                     <a class="dropdown-item" href="<?php echo BASE_URL; ?>common/logout.php"><i class="dw dw-logout"></i> Log Out</a>
                 </div>
             </div>

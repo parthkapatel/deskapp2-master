@@ -20,7 +20,7 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-user-1"></span><span class="mtext">Manage Parents</span>
+							<span class="micon icon-copy ion-ios-person-outline"></span><span class="mtext">Manage Parents</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="<?php echo Teacher_BASE_URL; ?>pendingList/">Parents List</a></li>
@@ -29,7 +29,7 @@
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-user-1"></span><span class="mtext">Kid Details</span>
+							<span class="micon icon-copy ion-social-reddit-outline"></span><span class="mtext">Kid Details</span>
 						</a>
 						<ul class="submenu">
 							<li><a href="<?php echo Teacher_BASE_URL; ?>kidDetails/">View Kids Details</a></li>
@@ -37,7 +37,7 @@
 					</li>
                     <li class="dropdown">
                         <a href="javascript:;" class="dropdown-toggle">
-                            <span class="micon dw dw-user-1"></span><span class="mtext">Lessons</span>
+                            <span class="micon icon-copy ion-android-clipboard"></span><span class="mtext">Lessons</span>
                         </a>
                         <ul class="submenu">
                             <li><a href="<?php echo Teacher_BASE_URL; ?>addLessons/">Add Lessons</a></li>

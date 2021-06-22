@@ -15,7 +15,7 @@ $err = "";
 $success = "";
 
 if (isset($_REQUEST["btnAddLesson"])) {
-    $res = $conn->insertLessons();
+    $res = $conn->insertLessons($_REQUEST["title"]);
     $res = json_decode($res);
     if($res->status == "success"){
         $success = $res->message;

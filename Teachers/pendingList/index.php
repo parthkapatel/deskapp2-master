@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+
 <?php include_once '../../common/header.php'; ?>
 <?php
 require_once "../../common/Operations.php";

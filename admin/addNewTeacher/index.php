@@ -1,9 +1,5 @@
 <?php include_once '../../common/header.php'; ?>
 
-<?php include_once '../../common/right-sidebar.php'; ?>
-
-<?php include_once '../admin-left-sidebar.php'; ?>
-
 <?php
 
 
@@ -34,6 +30,12 @@ if(isset($_REQUEST["addTeacher"])){
 }
 
 ?>
+
+<?php include_once '../../common/right-sidebar.php'; ?>
+
+<?php include_once '../admin-left-sidebar.php'; ?>
+
+
 <div class="main-container">
     <div class="pd-ltr-20 xs-pd-20-10">
         <div class="pd-20 card-box mb-30">

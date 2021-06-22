@@ -1,12 +1,12 @@
-<?php include_once '../../common/header.php';?>
+<?php include_once '../../common/header.php'; ?>
 
-<?php include_once '../../common/right-sidebar.php';?>
+<?php include_once '../../common/right-sidebar.php'; ?>
 
-<?php include_once '../admin-left-sidebar.php';?>
+<?php include_once '../teachers-left-sidebar.php'; ?>
 <?php
 require_once "../../common/Operations.php";
 $conn = new Operations();
-$res = $conn->getDataBySessionId($_SESSION["admin_id"], "admin_details");
+$res = $conn->getDataBySessionId($_SESSION["teacher_id"], "teacher_details");
 $name = $res["name"];
 $src = $res["image_path"];
 $email = $res["email"];
@@ -76,4 +76,4 @@ $dob = $res["date_of_birth"];
         </div>
     </div>
 
-<?php include_once '../../common/footer.php';?>
+<?php include_once '../../common/footer.php'; ?>

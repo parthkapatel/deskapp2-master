@@ -1,8 +1,5 @@
 <?php include_once '../../common/header.php'; ?>
 
-<?php include_once '../../common/right-sidebar.php'; ?>
-
-<?php include_once '../admin-left-sidebar.php'; ?>
 <?php
 $err = "";
 $success = "";
@@ -13,10 +10,7 @@ if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
     header("Location: $path");
 }
 
-if (isset($_REQUEST["id"]) && $_REQUEST["id"] != $_SESSION["admin_id"]) {
-    $path = ADMIN_BASE_URL . "viewAdminList/";
-    header("Location: $path");
-} else if (isset($_REQUEST["id"]) && $_REQUEST["id"] == $_SESSION["admin_id"]) {
+if (isset($_REQUEST["id"])) {
     include_once "../../common/Operations.php";
     $conn = new Operations();
     $res = $conn->getAdminDetailsById($_REQUEST["id"]);
@@ -30,14 +24,18 @@ if (isset($_REQUEST["updateAdmin"])) {
         $res = json_decode($res);
         if ($res->status == "success") {
             $success = $res->message;
-            $path = ADMIN_BASE_URL . "viewAdminList/";
-            header("Location:".ADMIN_BASE_URL);
+            header("Location:".ADMIN_BASE_URL."viewAdminList/");
         } else if ($res->status == "error") {
             $err = $res->message;
         }
     }
 }
 ?>
+
+<?php include_once '../../common/right-sidebar.php'; ?>
+
+<?php include_once '../admin-left-sidebar.php'; ?>
+
     <div class="main-container">
         <div class="pd-ltr-20 xs-pd-20-10">
             <div class="pd-20 card-box mb-30">

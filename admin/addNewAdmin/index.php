@@ -79,7 +79,7 @@ if (isset($_REQUEST["addAdmin"])) {
                         <div class="form-group row">
                             <label class="form-control-label col-sm-12 col-md-3 col-form-label">Image</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="file" accept=".jpeg,.jpg" name="image_name" id="image_name"
+                                <input type="file" accept=".jpeg,.jpg" name="image_path" id="image_path"
                                        class="form-control">
                                 <div class="form-control-feedback"></div>
                             </div>

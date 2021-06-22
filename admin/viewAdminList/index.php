@@ -1,8 +1,5 @@
 <?php include_once '../../common/header.php'; ?>
 
-<?php include_once '../../common/right-sidebar.php'; ?>
-
-<?php include_once '../admin-left-sidebar.php'; ?>
 <?php
 
 if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
@@ -10,14 +7,19 @@ if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
     header("Location: $path");
 }
 
-if(isset($_REQUEST["id"])){
+if (isset($_REQUEST["id"])) {
     include_once "../../common/Operations.php";
     $conn = new Operations();
     $res = $conn->deleteAdminDetails($_REQUEST["id"]);
-    header("Location:/admin/viewAdminList");
+    header("Location: ".ADMIN_BASE_URL."viewAdminList");
 }
 
 ?>
+
+<?php include_once '../../common/right-sidebar.php'; ?>
+
+<?php include_once '../admin-left-sidebar.php'; ?>
+
 
 <div class="main-container">
     <div class="pd-ltr-20 xs-pd-20-10">
@@ -52,8 +54,8 @@ if(isset($_REQUEST["id"])){
                     <tr>
                         <td><?php echo $no++; ?></td>
                         <td class="table-plus">
-                            <img src="<?php echo BASE_URL; ?>vendors/images/product-1.jpg" width="70" height="70"
-                                 alt="">
+                            <img src="<?php echo BASE_URL . $val["image_path"]; ?>" width="70" height="70"
+                                 alt="No Profile">
                         </td>
                         <td>
                             <h5 class="font-16"><?php echo $val["name"]; ?></h5>
@@ -71,8 +73,12 @@ if(isset($_REQUEST["id"])){
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                                     <!--<a class="dropdown-item" href="#"><i class="dw dw-eye"></i> View</a>-->
-                                    <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/editAdmin/?id=<?php echo $val['id']; ?>"><i class="dw dw-edit2"></i> Edit</a>
-                                    <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/viewAdminList/?key=delete&id=<?php echo $val['id']; ?>"><i class="dw dw-delete-3"></i> Delete</a>
+                                    <a class="dropdown-item"
+                                       href="<?php echo ADMIN_BASE_URL; ?>editAdmin/?id=<?php echo $val['id']; ?>"><i
+                                                class="dw dw-edit2"></i> Edit</a>
+                                    <a class="dropdown-item"
+                                       href="<?php echo BASE_URL; ?>admin/viewAdminList/?key=delete&id=<?php echo $val['id']; ?>"><i
+                                                class="dw dw-delete-3"></i> Delete</a>
                                 </div>
                             </div>
                         </td>

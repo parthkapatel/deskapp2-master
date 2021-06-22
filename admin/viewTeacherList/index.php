@@ -55,8 +55,8 @@ if(isset($_REQUEST["id"])){
                     <tr>
                         <td><?php echo $no++; ?></td>
                         <td class="table-plus">
-                            <img src="<?php echo BASE_URL; ?>vendors/images/product-1.jpg" width="70" height="70"
-                                 alt="">
+                            <img src="<?php echo BASE_URL . $val["image_path"]; ?>" width="70" height="70"
+                                 alt="No Profile">
                         </td>
                         <td>
                             <h5 class="font-16"><?php echo $val["name"]; ?></h5>
