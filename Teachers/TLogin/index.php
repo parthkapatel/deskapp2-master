@@ -21,7 +21,6 @@ $success = "";
 if(isset($_REQUEST["teacherLogin"])){
     $email = $_REQUEST["email"];
     $password = $_REQUEST["password"];
-    var_dump("hello");
     include_once "../../common/Operations.php";
     $conn = new Operations();
     $res = $conn->checkEmailAndPassword($email,$password,"teacher_details");

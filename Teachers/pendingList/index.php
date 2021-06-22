@@ -52,7 +52,7 @@ if (isset($_REQUEST["reject"])) {
                 foreach ($res as $val) {
                     ?>
                     <tr>
-                        <td class="table-plus"><?php echo $no; ?></td>
+                        <td class="table-plus"><?php echo $no++; ?></td>
                         <td><img src="<?php echo $val["image_path"]; ?>" width="70" height="70" alt="No Profile"></td>
                         <td><?php echo $val["name"]; ?></td>
                         <td><?php echo $val["mobile"]; ?></td>

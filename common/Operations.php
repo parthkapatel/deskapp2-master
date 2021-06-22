@@ -7,6 +7,7 @@ class Operations
     private $parent_details;
     private $teacher_details;
     private $kids_details;
+    private $lessons;
 
     function __construct()
     {
@@ -17,6 +18,7 @@ class Operations
         $this->parent_details = "parents_details";
         $this->teacher_details = "teacher_details";
         $this->kids_details = "kids_details";
+        $this->lessons = "lessons";
     }
 
     function getAdminsDetails()
@@ -147,6 +149,31 @@ class Operations
                 $stmt->execute();
                 if (isset($stmt))
                     return json_encode(["status" => "success", "message" => "Insert Admin Details Successfully"]);
+                else {
+                    return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
+                }
+            } else {
+                return json_encode(["status" => "error", "message" => "Sorry, there was an error uploading your file."]);
+            }
+
+        } catch (PDOException  $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function insertLessons($lessons)
+    {
+
+        try {
+            $target_file = BASE_URL . "src/lessons/" . basename($_FILES["lessons"]["name"]);
+            $path = "/" . $target_file;
+            if (move_uploaded_file($_FILES["lessons"]["tmp_name"], $target_file)) {
+                $dataQuery = "INSERT INTO $this->lessons (path) VALUES (:path)";
+                $stmt = $this->conn->prepare($dataQuery);
+                $stmt->bindParam(":path", $path);
+                $stmt->execute();
+                if (isset($stmt))
+                    return json_encode(["status" => "success", "message" => "Insert Lessons Successfully"]);
                 else {
                     return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
                 }

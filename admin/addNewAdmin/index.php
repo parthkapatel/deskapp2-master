@@ -14,22 +14,22 @@ if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
 $err = "";
 $success = "";
 
-if(isset($_REQUEST["addAdmin"])){
+if (isset($_REQUEST["addAdmin"])) {
     /*if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || $_REQUEST["email"] || empty($_REQUEST["password"]))
     {
         $err = "all fields are required";
     }else{*/
-        include_once "../../common/Operations.php";
-        $conn = new Operations();
-        $res = $conn->insertAdminDetails($_REQUEST["name"],$_REQUEST["mobile"],$_REQUEST["address"],$_REQUEST["city"],$_REQUEST["date_of_birth"],$_REQUEST["image_path"],$_REQUEST["email"],$_REQUEST["password"]);
-        $res = json_decode($res);
-        if($res->status == "success"){
-            $success = $res->message;
-            $path = BASE_URL . "admin/viewAdminList/";
-            // header("Location: $path");
-        }else if($res->status == "error"){
-            $err = $res->message;
-        }
+    include_once "../../common/Operations.php";
+    $conn = new Operations();
+    $res = $conn->insertAdminDetails($_REQUEST["name"], $_REQUEST["mobile"], $_REQUEST["address"], $_REQUEST["city"], $_REQUEST["date_of_birth"], $_REQUEST["image_path"], $_REQUEST["email"], $_REQUEST["password"]);
+    $res = json_decode($res);
+    if ($res->status == "success") {
+        $success = $res->message;
+        $path = BASE_URL . "admin/viewAdminList/";
+        header("Location: $path");
+    } else if ($res->status == "error") {
+        $err = $res->message;
+    }
     //}
 }
 ?>
@@ -82,7 +82,8 @@ if(isset($_REQUEST["addAdmin"])){
                         <div class="form-group row">
                             <label class="form-control-label col-sm-12 col-md-3 col-form-label">Image</label>
                             <div class="col-sm-12 col-md-9">
-                                <input type="file" accept=".jpeg,.jpg" name="image_path" id="image_path" class="form-control">
+                                <input type="file" accept=".jpeg,.jpg" name="image_path" id="image_path"
+                                       class="form-control">
                                 <div class="form-control-feedback"></div>
                             </div>
                         </div>
@@ -101,9 +102,9 @@ if(isset($_REQUEST["addAdmin"])){
                             </div>
                         </div>
                         <input type="submit" class="btn btn-primary" name="addAdmin" value="Add Admin">
-                        <?php if($err !== ""){ ?>
+                        <?php if ($err !== "") { ?>
                             <div class="alert alert-danger "><?php echo $err; ?></div>
-                        <?php }else if($success !== ""){ ?>
+                        <?php } else if ($success !== "") { ?>
                             <div class="alert alert-success "><?php echo $success; ?></div>
                         <?php } ?>
                     </div>

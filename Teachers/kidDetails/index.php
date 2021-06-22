@@ -54,16 +54,23 @@ if (!isset($_SESSION["teacher_email"])) {
                     </thead>
                     <tbody>
                     <?php
-
-                    $res = $conn->getChildDetailsByParentId($_REQUEST["id"]);
-                    $no = 1;
-                    foreach ($res as $val) {
+                    if (isset($_REQUEST["id"])) {
+                        $res = $conn->getChildDetailsByParentId($_REQUEST["id"]);
+                        $no = 1;
+                        foreach ($res as $val) {
+                            ?>
+                            <tr>
+                                <td><?php echo $no++; ?></td>
+                                <td><?php echo $val["name"]; ?></td>
+                                <td><?php echo $val["email"]; ?></td>
+                                <td><?php echo $val["date_of_birth"]; ?></td>
+                            </tr>
+                            <?php
+                        }
+                    } else {
                         ?>
                         <tr>
-                            <td><?php echo $no; ?></td>
-                            <td><?php echo $val["name"]; ?></td>
-                            <td><?php echo $val["email"]; ?></td>
-                            <td><?php echo $val["date_of_birth"]; ?></td>
+                            <td>Select Parent Name</td>
                         </tr>
                         <?php
                     }

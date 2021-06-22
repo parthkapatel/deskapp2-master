@@ -1,7 +1,7 @@
 <?php include_once '../../common/header.php'; ?>
 
 <?php
-session_start();
+
 
 if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
     $path = BASE_URL . "admin/";
