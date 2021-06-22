@@ -131,9 +131,9 @@ class Operations
     function insertAdminDetails($name, $mobile, $address, $city, $date_of_birth, $email, $password)
     {
         try {
-            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-            $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-            if (move_uploaded_file($_FILES["image_name"]["tmp_name"], $target_file)) {
+            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+            $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+            if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
                 $dataQuery = "INSERT INTO $this->admin_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,:date_of_birth,:image_path,:email,:password)";
                 $stmt = $this->conn->prepare($dataQuery);
                 $pass = password_hash($password, PASSWORD_BCRYPT);
@@ -163,8 +163,8 @@ class Operations
     function insertLessons()
     {
         try {
-            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-            $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
+            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+            $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
             if (move_uploaded_file($_FILES["lessons"]["tmp_name"], $target_file)) {
                 $dataQuery = "INSERT INTO $this->lessons (path) VALUES (:path)";
                 $stmt = $this->conn->prepare($dataQuery);
@@ -184,13 +184,13 @@ class Operations
         }
     }
 
-    function insertParentDetails($name, $mobile, $address, $city, $date_of_birth, $cpr, $syndrome_details, $email, $password)
+    function insertParentDetails($name, $mobile, $address, $city, $date_of_birth, $email, $password)
     {
         try {
-            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-            $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
+            $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+            $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
             if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
-                $dataQuery = "INSERT INTO $this->parent_details (name, mobile,address,city,date_of_birth,image_path,syndrome_details,email,password) VALUES (:name,:mobile,:address,:city,date_of_birth,image_path,:cpr,:syndrome_details,:email,:password,:phone)";
+                $dataQuery = "INSERT INTO $this->parent_details (name, mobile,address,city,date_of_birth,image_path,email,password) VALUES (:name,:mobile,:address,:city,:date_of_birth,:image_path,:email,:password)";
                 $stmt = $this->conn->prepare($dataQuery);
                 $pass = password_hash($password, PASSWORD_BCRYPT);
                 $stmt->bindParam(":name", $name);
@@ -199,14 +199,13 @@ class Operations
                 $stmt->bindParam(":city", $city);
                 $stmt->bindParam(":date_of_birth", $date_of_birth);
                 $stmt->bindParam(":image_path", $path);
-                $stmt->bindParam(":syndrome_details", $syndrome_details);
                 $stmt->bindParam(":email", $email);
                 $stmt->bindParam(":password", $pass);
                 $stmt->execute();
                 if (isset($stmt))
-                    return "Insert Parent Details Successfully";
+                    return json_encode(["status" => "success", "message" => "Registration Successfully"]);
                 else {
-                    return "Something is Wrong!";
+                    return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
                 }
             } else {
                 return json_encode(["status" => "error", "message" => "Sorry, there was an error uploading your file."]);
@@ -277,8 +276,8 @@ class Operations
     {
         try {
             if (isset($image_path)) {
-                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-                $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
+                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+                $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
                     $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`password` = :password WHERE id=:uid";
                 }
@@ -309,17 +308,17 @@ class Operations
         }
     }
 
-    function updateParentDetails($parent_id, $name, $mobile, $address, $city, $date_of_birth, $cpr, $syndrome_details, $password)
+    function updateParentDetails($parent_id, $name, $mobile, $address, $city, $date_of_birth, $password)
     {
         try {
             if (isset($image_path)) {
-                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-                $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
+                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+                $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
-                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`syndrome_details`=:syndrome_details,`password` = :password WHERE id=:uid";
+                    $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`password` = :password WHERE id=:uid";
                 }
             } else {
-                $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`syndrome_details`=:syndrome_details,`password` = :password WHERE id=:uid";
+                $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`password` = :password WHERE id=:uid";
             }
             $stmt = $this->conn->prepare($dataQuery);
             $pass = password_hash($password, PASSWORD_BCRYPT);
@@ -330,8 +329,6 @@ class Operations
             $stmt->bindParam(":city", $city);
             $stmt->bindParam(":date_of_birth", $date_of_birth);
             $stmt->bindParam(":image_path", $path);
-            $stmt->bindParam(":cpr", $cpr);
-            $stmt->bindParam(":syndrome_details", $syndrome_details);
             $stmt->bindParam(":password", $pass);
 
             $stmt->execute();
@@ -349,8 +346,8 @@ class Operations
     {
         try {
             if (isset($image_path)) {
-                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_name"]["name"]);
-                $path = "/src/images/profile/" . basename($_FILES["image_name"]["name"]);
+                $target_file = $_SERVER["DOCUMENT_ROOT"] . "/Darshan_Sir/deskapp2-master/src/images/profile/" . basename($_FILES["image_path"]["name"]);
+                $path = "/src/images/profile/" . basename($_FILES["image_path"]["name"]);
                 if (move_uploaded_file($_FILES["image_path"]["tmp_name"], $target_file)) {
                     $dataQuery = "update $this->admin_details set `name`= :name,`mobile`= :mobile,`address`= :address,`city`= :city,`date_of_birth`= :date_of_birth,`image_path`=:image_path,`cpr`=:cpr,`password` = :password WHERE id=:uid";
                 }

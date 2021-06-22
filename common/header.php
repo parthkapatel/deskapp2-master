@@ -44,7 +44,7 @@
     </div>
 </div>-->
 
-<?php if(isset($_SESSION["admin_email"]) || isset($_SESSION["teacher_email"])){ ?>
+<?php if(isset($_SESSION["parent_email"]) || isset($_SESSION["admin_email"]) || isset($_SESSION["teacher_email"])){ ?>
 <div class="header">
     <div class="header-left">
         <div class="menu-icon dw dw-menu"></div>
@@ -61,7 +61,7 @@
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img height="40px" width="40px" src="<?php echo BASE_URL; ?><?php echo $_SESSION["session_image_path"];?> " alt="">
+							<img height="40px" width="40px" src="<?php echo BASE_URL. $_SESSION["session_image_path"];?> " alt="">
 						</span>
                     <?php if(isset($_SESSION["session_name"])){ ?>
                         <span class="user-name"><?php echo $_SESSION["session_name"]; ?></span>

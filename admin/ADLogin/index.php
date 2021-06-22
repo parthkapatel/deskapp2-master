@@ -8,6 +8,10 @@ if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
     header("Location: $path");
 }
 
+if (isset($_SESSION["parent_email"]) || isset($_SESSION["parent_id"])) {
+    header("Location:".PARENT_BASE_URL);
+}
+
 if (isset($_SESSION["teacher_email"]) || isset($_SESSION["teacher_id"])) {
     header("Location: ".Teacher_BASE_URL);
 }

@@ -1,3 +1,42 @@
+<?php
+session_start();
+include_once "common/config.php";
+if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
+    $path = BASE_URL . "admin/";
+    header("Location: $path");
+}
+
+if (isset($_SESSION["parent_email"]) || isset($_SESSION["parent_id"])) {
+    header("Location:".PARENT_BASE_URL);
+}
+
+if (isset($_SESSION["teacher_email"]) || isset($_SESSION["teacher_id"])) {
+    header("Location: ".Teacher_BASE_URL);
+}
+$err = "";
+$success = "";
+if(isset($_REQUEST["login"])){
+    $email = $_REQUEST["email"];
+    $password = $_REQUEST["password"];
+    include_once "common/Operations.php";
+
+    $conn = new Operations();
+    $res = $conn->checkEmailAndPassword($email,$password,"parents_details");
+    $res = json_decode($res);
+    if($res->status == "success"){
+        $success = $res->message;
+        $_SESSION["parent_email"] = $res->data->email;
+        $_SESSION["parent_id"] = $res->data->id;
+        $_SESSION["session_name"] = $res->data->name;
+        $_SESSION["session_image_path"] =$res->data->image_path;
+        var_dump($res->data);
+        die();
+        //header("Location:".PARENT_BASE_URL);
+    }else if($res->status == "error"){
+        $err = $res->message;
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -56,16 +95,16 @@
 						<div class="login-title">
 							<h2 class="text-center text-primary">Login To DeskApp</h2>
 						</div>
-						<form>
+						<form action="" method="post">
 
 							<div class="input-group custom">
-								<input type="text" class="form-control form-control-lg" placeholder="Username">
+								<input type="text" name="email" class="form-control form-control-lg" placeholder="Email Id">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="icon-copy dw dw-user1"></i></span>
 								</div>
 							</div>
 							<div class="input-group custom">
-								<input type="password" class="form-control form-control-lg" placeholder="**********">
+								<input type="password" name="password" class="form-control form-control-lg" placeholder="**********">
 								<div class="input-group-append custom">
 									<span class="input-group-text"><i class="dw dw-padlock1"></i></span>
 								</div>
@@ -78,11 +117,16 @@
 											use code for form submit
 											<input class="btn btn-primary btn-lg btn-block" type="submit" value="Sign In">
 										-->
-										<a class="btn btn-primary btn-lg btn-block" href="index.html">Sign In</a>
+										<button type="submit" class="btn btn-primary btn-lg btn-block" name="login" >Sign In</button>
 									</div>
 									<div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
 									<div class="input-group mb-0">
 										<a class="btn btn-outline-primary btn-lg btn-block" href="register.php">Register To Create Account</a>
+                                        <?php if ($err !== "") { ?>
+                                            <div class="alert alert-danger "><?php echo $err; ?></div>
+                                        <?php } else if ($success !== "") { ?>
+                                            <div class="alert alert-success "><?php echo $success; ?></div>
+                                        <?php } ?>
 									</div>
 								</div>
 							</div>

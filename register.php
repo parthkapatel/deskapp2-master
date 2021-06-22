@@ -1,3 +1,32 @@
+<?php
+session_start();
+include_once "common/config.php";
+if (isset($_SESSION["parent_email"]) || isset($_SESSION["parent_id"])) {
+    header("Location:".PARENT_BASE_URL);
+}
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+$err = "";
+$success = "";
+
+if (isset($_REQUEST["register"])) {
+    if(empty($_REQUEST["name"]) || empty($_REQUEST["mobile"]) || empty($_REQUEST["address"]) || empty($_REQUEST["city"]) || empty($_REQUEST["date_of_birth"])  || empty($_REQUEST["email"]) || empty($_REQUEST["password"]))
+    {
+        $err = "all fields are required";
+    }else{
+        include_once "common/Operations.php";
+        $conn = new Operations();
+        $res = $conn->insertParentDetails($_REQUEST["name"], $_REQUEST["mobile"], $_REQUEST["address"], $_REQUEST["city"], $_REQUEST["date_of_birth"], $_REQUEST["email"], $_REQUEST["password"]);
+        $res = json_decode($res);
+        if ($res->status == "success") {
+            $success = $res->message;
+            header("Location: index.php");
+        } else if ($res->status == "error") {
+            $err = $res->message;
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -56,9 +85,9 @@
 				</div>
 				<div class="col-md-6 col-lg-5">
 					<div class="register-box bg-white box-shadow border-radius-10">
-						<div class="wizard-content">
-							<form class="tab-wizard2 wizard-circle wizard">
-								<h5>Basic Information</h5>
+						<div class="container">
+							<form class="p-2" action="" method="post" enctype="multipart/form-data">
+								<h4>Basic Information</h4>
 								<section>
 									<div class="form-wrap max-width-600 mx-auto">
 										<div class="form-group row">
@@ -70,7 +99,7 @@
 										<div class="form-group row">
 											<label class="col-sm-4 col-form-label">Mobile</label>
 											<div class="col-sm-8">
-												<input type="number" class="form-control">
+												<input type="number" name="mobile" class="form-control">
 											</div>
 										</div>
 										<div class="form-group row">
@@ -82,7 +111,7 @@
 										<div class="form-group row">
 											<label class="col-sm-4 col-form-label">City</label>
 											<div class="col-sm-8">
-												<input type="text" class="form-control">
+												<input type="text" name="city" class="form-control">
 											</div>
 										</div>
 									</div>
@@ -94,13 +123,14 @@
 										<div class="form-group row">
 											<label class="col-sm-4 col-form-label">Date of Birth</label>
 											<div class="col-sm-8">
-												<input type="date" class="form-control">
+												<input type="date" name="date_of_birth" class="form-control">
+
 											</div>
 										</div>
                                         <div class="form-group row">
                                             <label class="col-sm-4 col-form-label">Profile</label>
                                             <div class="col-sm-8">
-                                                <input type="file" class="form-control">
+                                                <input type="file" name="image_path" id="image_path" class="form-control">
                                             </div>
                                         </div>
 									</div>
@@ -111,70 +141,22 @@
                                     <div class="form-group row">
                                         <label class="col-sm-4 col-form-label">Email</label>
                                         <div class="col-sm-8">
-                                            <input type="email" class="form-control">
+                                            <input type="email" name="email" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-4 col-form-label">Password</label>
                                         <div class="col-sm-8">
-                                            <input type="password" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-4 col-form-label">Conform Password</label>
-                                        <div class="col-sm-8">
-                                            <input type="password" class="form-control">
+                                            <input type="password" name="password" class="form-control">
                                         </div>
                                     </div>
 								</section>
-								<!-- Step 4 -->
-								<h5>Overview Information</h5>
-								<section>
-									<div class="form-wrap max-width-600 mx-auto">
-										<ul class="register-info">
-											<li>
-												<div class="row">
-													<div class="col-sm-4 weight-600">Name</div>
-													<div class="col-sm-8">joh Tailor</div>
-												</div>
-											</li>
-											<li>
-												<div class="row">
-													<div class="col-sm-4 weight-600">Mobile</div>
-													<div class="col-sm-8">789654123</div>
-												</div>
-											</li>
-											<li>
-												<div class="row">
-													<div class="col-sm-4 weight-600">Address</div>
-													<div class="col-sm-8">Swastik Complex</div>
-												</div>
-											</li>
-											<li>
-												<div class="row">
-													<div class="col-sm-4 weight-600">City</div>
-													<div class="col-sm-8">Surat</div>
-												</div>
-											</li>
-											<li>
-												<div class="row">
-													<div class="col-sm-4 weight-600">Date of Birth</div>
-													<div class="col-sm-8">21 june 2021</div>
-												</div>
-											</li>
-                                            <li>
-                                                <div class="row">
-                                                    <div class="col-sm-4 weight-600">Email</div>
-                                                    <div class="col-sm-8">email@email.com</div>
-                                                </div>
-                                            </li>
-										</ul>
-										<div class="custom-control custom-checkbox mt-4">
-											<input type="checkbox" class="custom-control-input" id="customCheck1">
-											<label class="custom-control-label" for="customCheck1">I have read and agreed to the terms of services and privacy policy</label>
-										</div>
-									</div>
-								</section>
+                                <input type="submit" class="btn btn-primary" name="register" value="Register">
+                                <?php if ($err !== "") { ?>
+                                    <div class="alert alert-danger "><?php echo $err; ?></div>
+                                <?php } else if ($success !== "") { ?>
+                                    <div class="alert alert-success "><?php echo $success; ?></div>
+                                <?php } ?>
 							</form>
 						</div>
 					</div>
