@@ -44,7 +44,7 @@
     </div>
 </div>-->
 
-<?php if(isset($_SESSION["admin_email"])){ ?>
+<?php if(isset($_SESSION["admin_email"]) || isset($_SESSION["teacher_email"])){ ?>
 <div class="header">
     <div class="header-left">
         <div class="menu-icon dw dw-menu"></div>
@@ -61,16 +61,16 @@
             <div class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
 						<span class="user-icon">
-							<img src="<?php echo BASE_URL; ?><?php echo $_SESSION["admin_image_path"];?> " alt="">
+							<img height="40px" width="40px" src="<?php echo BASE_URL; ?><?php echo $_SESSION["session_image_path"];?> " alt="">
 						</span>
-                    <?php if(isset($_SESSION["admin_email"])){ ?>
-                        <span class="user-name"><?php echo $_SESSION["admin_name"]; ?></span>
+                    <?php if(isset($_SESSION["session_name"])){ ?>
+                        <span class="user-name"><?php echo $_SESSION["session_name"]; ?></span>
                     <?php } ?>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
                     <a class="dropdown-item" href="<?php echo BASE_URL; ?>admin/profile/"><i class="dw dw-user1"></i>
                         Profile</a>
-                    <a class="dropdown-item" href="login.html"><i class="dw dw-logout"></i> Log Out</a>
+                    <a class="dropdown-item" href="<?php echo BASE_URL; ?>common/logout.php"><i class="dw dw-logout"></i> Log Out</a>
                 </div>
             </div>
         </div>

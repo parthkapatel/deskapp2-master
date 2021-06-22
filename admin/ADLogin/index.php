@@ -8,6 +8,10 @@ if (isset($_SESSION["admin_email"]) || isset($_SESSION["admin_id"])) {
     header("Location: $path");
 }
 
+if (isset($_SESSION["teacher_email"]) || isset($_SESSION["teacher_id"])) {
+    header("Location: ".Teacher_BASE_URL);
+}
+
 $err = "";
 $success = "";
 if(isset($_REQUEST["adminLogin"])){
@@ -22,8 +26,8 @@ if(isset($_REQUEST["adminLogin"])){
         $success = $res->message;
         $_SESSION["admin_email"] = $res->data->email;
         $_SESSION["admin_id"] = $res->data->id;
-        $_SESSION["admin_name"] = $res->data->name;
-        $_SESSION["admin_image_path"] =$res->data->image_path;
+        $_SESSION["session_name"] = $res->data->name;
+        $_SESSION["session_image_path"] =$res->data->image_path;
         $path = BASE_URL . "admin/";
         header("Location: $path");
     }else if($res->status == "error"){

@@ -1,7 +1,7 @@
 <?php ?>
 <div class="left-side-bar">
 		<div class="brand-logo">
-			<a href="<?php echo BASE_URL; ?>admin/">
+			<a href="<?php echo Teacher_BASE_URL; ?>">
 				<img src="<?php echo BASE_URL; ?>vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
 				<img src="<?php echo BASE_URL; ?>vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
 			</a>
@@ -13,17 +13,17 @@
 			<div class="sidebar-menu">
 				<ul id="accordion-menu">
 					<li>
-						<a href="<?php echo BASE_URL; ?>admin/" class="dropdown-toggle no-arrow">
+						<a href="<?php echo Teacher_BASE_URL; ?>" class="dropdown-toggle no-arrow">
 							<span class="micon dw dw-house"></span><span class="mtext">Dashboard</span>
 						</a>
 					</li>
 
 					<li class="dropdown">
 						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-user-1"></span><span class="mtext">Parents Request</span>
+							<span class="micon dw dw-user-1"></span><span class="mtext">Manage Parents</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="<?php echo BASE_URL; ?>Teachers/parentsRequest/index.php">Request</a></li>
+							<li><a href="<?php echo Teacher_BASE_URL; ?>pendingList/">Parents List</a></li>
 						</ul>
 					</li>
 
@@ -32,7 +32,7 @@
 							<span class="micon dw dw-user-1"></span><span class="mtext">Kid Details</span>
 						</a>
 						<ul class="submenu">
-							<li><a href="<?php echo BASE_URL; ?>Teachers/kidDetails/index.php">View Kids Details</a></li>
+							<li><a href="<?php echo Teacher_BASE_URL; ?>kidDetails/">View Kids Details</a></li>
 						</ul>
 					</li>
                     <li class="dropdown">
@@ -40,7 +40,7 @@
                             <span class="micon dw dw-user-1"></span><span class="mtext">Lessons</span>
                         </a>
                         <ul class="submenu">
-                            <li><a href="<?php echo BASE_URL; ?>Teachers/addLessons/index.php">Add Lessons</a></li>
+                            <li><a href="<?php echo Teacher_BASE_URL; ?>addLessons/">Add Lessons</a></li>
                         </ul>
                     </li>
 				</ul>

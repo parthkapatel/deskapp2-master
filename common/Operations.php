@@ -6,6 +6,7 @@ class Operations
     private $admin_details;
     private $parent_details;
     private $teacher_details;
+    private $kids_details;
 
     function __construct()
     {
@@ -13,8 +14,9 @@ class Operations
         $db = new DBConfig();
         $this->conn = $db->DBConnect();
         $this->admin_details = "admin_details";
-        $this->parent_details = "parent_details";
+        $this->parent_details = "parents_details";
         $this->teacher_details = "teacher_details";
+        $this->kids_details = "kids_details";
     }
 
     function getAdminsDetails()
@@ -33,7 +35,7 @@ class Operations
     function getParentsDetails()
     {
         try {
-            $getData = "select * from $this->parent_details pd";
+            $getData = "select * from $this->parent_details";
             $stmt = $this->conn->prepare($getData);
             $stmt->execute();
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -70,10 +72,10 @@ class Operations
         }
     }
 
-    function getParentDetailsById($id)
+    function getChildDetailsByParentId($id)
     {
         try {
-            $getData = "select * from $this->parent_details td where id=:id";
+            $getData = "select kd.id,kd.name,kd.email,kd.date_of_birth from $this->kids_details kd inner join $this->parent_details pd on kd.parent_id = pd.id where pd.id=:id";
             $stmt = $this->conn->prepare($getData);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
@@ -83,6 +85,8 @@ class Operations
             echo $e->getMessage();
         }
     }
+
+
 
     function getTeacherDetailsById($id): array
     {
@@ -331,6 +335,24 @@ class Operations
             $stmt->execute();
             if (isset($stmt))
                 return json_encode(["status" => "success", "message" => "Update Teacher Details Successfully"]);
+            else {
+                return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
+            }
+        } catch (PDOException  $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    function updateParentStatus($id,$status)
+    {
+        try {
+            $dataQuery = "update $this->parent_details set `status`= :status WHERE id=:uid";
+            $stmt = $this->conn->prepare($dataQuery);
+            $stmt->bindParam(":uid", $id);
+            $stmt->bindParam(":status", $status);
+            $stmt->execute();
+            if (isset($stmt))
+                return json_encode(["status" => "success", "message" => "Update Parent Status Successfully"]);
             else {
                 return json_encode(["status" => "error", "message" => "Something is Wrong!"]);
             }

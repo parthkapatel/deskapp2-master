@@ -4,7 +4,8 @@
 
 <?php include_once '../admin-left-sidebar.php'; ?>
 <?php
-
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 if (!isset($_SESSION["admin_email"]) || !isset($_SESSION["admin_id"])) {
     $path = BASE_URL . "admin/ADLogin/";
